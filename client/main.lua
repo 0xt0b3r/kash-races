@@ -32,7 +32,7 @@ Citizen.CreateThread(function()
                 for k, race in pairs(Races) do
                     if Races[k] ~= nil then
                         if GetDistanceBetweenCoords(pos.x, pos.y, pos.z, Races[k].startx, Races[k].starty, Races[k].startz, true) < 15.0 and not Races[k].started then
-                            ESX.DrawText3D(Races[k].startx, Races[k].starty, Races[k].startz, "[~g~H~w~] To join the race (~g~$"..Races[k].amount.."~w~)")
+                            DrawText3D(Races[k].startx, Races[k].starty, Races[k].startz, "[~g~H~w~] To join the race (~g~$"..Races[k].amount.."~w~)")
                             if IsControlJustReleased(0, Keys["H"]) then
                                 TriggerServerEvent("kash-races:JoinRace", k)
                             end
@@ -44,13 +44,13 @@ Citizen.CreateThread(function()
             -- In race nog niet gestart
             if RaceId ~= 0 and not InRace then
                 if GetDistanceBetweenCoords(pos.x, pos.y, pos.z, Races[RaceId].startx, Races[RaceId].starty, Races[RaceId].startz, true) < 15.0 and not Races[RaceId].started then
-                    ESX.DrawText3D(Races[RaceId].startx, Races[RaceId].starty, Races[RaceId].startz, "Race will be started soon...")
+                    DrawText3D(Races[RaceId].startx, Races[RaceId].starty, Races[RaceId].startz, "Race will be started soon...")
                 end
             end
             -- In race en gestart
             if RaceId ~= 0 and InRace then
                 if GetDistanceBetweenCoords(pos.x, pos.y, pos.z, Races[RaceId].endx, Races[RaceId].endy, pos.z, true) < 250.0 and Races[RaceId].started then
-                    ESX.DrawText3D(Races[RaceId].endx, Races[RaceId].endy, pos.z + 0.98, "FINISH")
+                    DrawText3D(Races[RaceId].endx, Races[RaceId].endy, pos.z + 0.98, "FINISH")
                     if GetDistanceBetweenCoords(pos.x, pos.y, pos.z, Races[RaceId].endx, Races[RaceId].endy, pos.z, true) < 15.0 then
                         TriggerServerEvent("kash-races:RaceWon", RaceId)
                         InRace = false
@@ -60,7 +60,7 @@ Citizen.CreateThread(function()
             
             if ShowCountDown then
                 if GetDistanceBetweenCoords(pos.x, pos.y, pos.z, Races[RaceId].startx, Races[RaceId].starty, Races[RaceId].startz, true) < 15.0 and Races[RaceId].started then
-                    ESX.DrawText3D(Races[RaceId].startx, Races[RaceId].starty, Races[RaceId].startz, "Race starting in ~g~"..RaceCount)
+                    DrawText3D(Races[RaceId].startx, Races[RaceId].starty, Races[RaceId].startz, "Race starting in ~g~"..RaceCount)
                 end
             end
         end
@@ -135,5 +135,22 @@ function RaceCountDown()
     RaceCount = 5
     FreezeEntityPosition(GetVehiclePedIsIn(GetPlayerPed(-1), true), false)
     ESX.ShowNotification("GOOOOOOOOO!!!")
+end
+
+function DrawText3D(x, y, z, text)
+    SetTextScale(0.35, 0.35)
+    SetTextFont(4)
+    SetTextProportional(1)
+    SetTextColour(255, 255, 255, 215)
+    SetTextEntry("STRING")
+    SetTextCentre(true)
+    AddTextComponentString(text)
+    --DrawText(_x,_y)
+    SetDrawOrigin(x,y,z, 0)
+    DrawText(0.0, 0.0)
+    local factor = (string.len(text)) / 370
+    --DrawRect(_x,_y+0.0125, 0.017+ factor, 0.03, 0, 0, 0, 68)
+    DrawRect(0.0, 0.0+0.0125, 0.017+ factor, 0.03, 0, 0, 0, 68)
+    ClearDrawOrigin()
 end
 
